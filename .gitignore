@@ -1,0 +1,19 @@
+# Go build outputs
+/bin/
+/build/
+/dist/
+/out/
+/*.exe
+/*.dll
+/*.so
+/*.dylib
+
+# IDE/editor
+.vscode/
+.idea/
+*.iml
+.DS_Store
+
+# Logs & env
+*.log
+.env
