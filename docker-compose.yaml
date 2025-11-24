@@ -1,0 +1,35 @@
+services:
+  enrich-soc:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: izzatbey/enrich-soc:latest
+    container_name: enrich-soc
+    env_file:
+      - .env
+    environment:
+      # These mirror env names read by viper in your config.Load()
+      - KAFKA_BROKER=${KAFKA_BROKER}
+      - KAFKA_INPUT_TOPIC=${KAFKA_INPUT_TOPIC}
+      - KAFKA_OUTPUT_TOPIC=${KAFKA_OUTPUT_TOPIC}
+      - KAFKA_GROUP_ID=${KAFKA_GROUP_ID}
+      - MISP_URL=${MISP_URL}
+      - MISP_API_KEY=${MISP_API_KEY}
+      - EPSS_URL=${EPSS_URL}
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    healthcheck:
+      test: ["CMD", "sh", "-c", "ps aux | grep enrich-soc | grep -v grep || exit 1"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks:
+      - enrich-net
+
+networks:
+  enrich-net:
+    driver: bridge
